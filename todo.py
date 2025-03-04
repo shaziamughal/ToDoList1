@@ -4,12 +4,12 @@ from tkinter import messagebox
 # File to store tasks
 TASKS_FILE = "tasks.txt"
 
-# Create main application window  
+# Create main application window
 root = tk.Tk()
 root.title("To-Do List")
 root.geometry("400x500")
 
-# Create frame for task-list
+# Create frame for task list
 frame = tk.Frame(root)
 frame.pack(pady=10)
 
@@ -71,7 +71,7 @@ def clear_tasks():
     task_listbox.delete(0, tk.END)
     save_tasks()
 
-# Buttons for adding, removing, and clearing tasks
+# Buttons
 add_button = tk.Button(button_frame, text="Add Task", command=add_task, width=12)
 add_button.pack(side=tk.LEFT, padx=5)
 
