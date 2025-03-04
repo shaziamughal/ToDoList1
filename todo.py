@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox
 
+# File to store tasks
+TASKS_FILE = "tasks.txt"
+
 # Create main application window
 root = tk.Tk()
 root.title("To-Do List")
@@ -35,6 +38,7 @@ def add_task():
     if task:
         task_listbox.insert(tk.END, task)
         task_entry.delete(0, tk.END)
+        save_tasks()
     else:
         messagebox.showwarning("Warning", "Task cannot be empty!")
 
@@ -42,15 +46,43 @@ def remove_task():
     try:
         selected_task = task_listbox.curselection()
         task_listbox.delete(selected_task)
+        save_tasks()
     except:
         messagebox.showwarning("Warning", "Select a task to remove!")
 
-# Buttons for adding and removing tasks
+def save_tasks():
+    """Saves tasks to a file"""
+    with open(TASKS_FILE, "w") as file:
+        tasks = task_listbox.get(0, tk.END)
+        for task in tasks:
+            file.write(task + "\n")
+
+def load_tasks():
+    """Loads tasks from a file at startup"""
+    try:
+        with open(TASKS_FILE, "r") as file:
+            for line in file:
+                task_listbox.insert(tk.END, line.strip())
+    except FileNotFoundError:
+        pass  # If file doesn't exist, ignore error
+
+def clear_tasks():
+    """Clears all tasks from the list"""
+    task_listbox.delete(0, tk.END)
+    save_tasks()
+
+# Buttons
 add_button = tk.Button(button_frame, text="Add Task", command=add_task, width=12)
 add_button.pack(side=tk.LEFT, padx=5)
 
 remove_button = tk.Button(button_frame, text="Remove Task", command=remove_task, width=12)
-remove_button.pack(side=tk.RIGHT, padx=5)
+remove_button.pack(side=tk.LEFT, padx=5)
+
+clear_button = tk.Button(button_frame, text="Clear All", command=clear_tasks, width=12)
+clear_button.pack(side=tk.LEFT, padx=5)
+
+# Load tasks on startup
+load_tasks()
 
 # Run the application
 root.mainloop()
